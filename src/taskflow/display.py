@@ -11,10 +11,8 @@ from rich.live import Live
 from rich.panel import Panel
 from rich.progress import (
     BarColumn,
-    MofNCompleteColumn,
     Progress,
     SpinnerColumn,
-    TaskProgressColumn,
     TextColumn,
     TimeElapsedColumn,
 )
@@ -45,7 +43,7 @@ class MessageLog:
         """Render the message log as a Rich Panel with word wrapping."""
         table = Table.grid(expand=True, padding=(0, 1))
         table.add_column("Time", style="dim cyan", width=10, no_wrap=True)
-        table.add_column("Level", width=7, no_wrap=True)
+        table.add_column("Level", width=8, no_wrap=True)
         table.add_column("Message", overflow="fold")  # fold enables word wrapping
 
         level_styles = {
@@ -96,10 +94,10 @@ class DualProgressDisplay:
         # Outer progress bar (tracks first loop)
         self.outer_progress = Progress(
             SpinnerColumn(),
-            TextColumn("[bold blue]{task.description}"),
+            TextColumn("[bold blue]{task.description}", justify="left"),
             BarColumn(bar_width=40, complete_style="blue", finished_style="green"),
-            TaskProgressColumn(),
-            MofNCompleteColumn(),
+            TextColumn("{task.percentage:>6.0f}%", justify="right"),
+            TextColumn("{task.completed:>5}/{task.total:<5}", justify="right"),
             TextColumn("[cyan]Elapsed:[/cyan]"),
             TimeElapsedColumn(),
             expand=True,
@@ -108,10 +106,10 @@ class DualProgressDisplay:
         # Inner progress bar (tracks combined second and third loops)
         self.inner_progress = Progress(
             SpinnerColumn(),
-            TextColumn("[bold yellow]{task.description}"),
+            TextColumn("[bold yellow]{task.description}", justify="left"),
             BarColumn(bar_width=40, complete_style="yellow", finished_style="green"),
-            TaskProgressColumn(),
-            MofNCompleteColumn(),
+            TextColumn("{task.percentage:>6.0f}%", justify="right"),
+            TextColumn("{task.completed:>5}/{task.total:<5}", justify="right"),
             TextColumn("[cyan]Elapsed:[/cyan]"),
             TimeElapsedColumn(),
             expand=True,
