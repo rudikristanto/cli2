@@ -95,7 +95,7 @@ class DualProgressDisplay:
         self.outer_progress = Progress(
             SpinnerColumn(),
             TextColumn("[bold blue]{task.description}", justify="left"),
-            BarColumn(bar_width=40, complete_style="blue", finished_style="green"),
+            BarColumn(bar_width=None, complete_style="blue", finished_style="green"),
             TextColumn("{task.percentage:>6.0f}%", justify="right"),
             TextColumn("{task.completed:>5}/{task.total:<5}", justify="right"),
             TextColumn("[cyan]Elapsed:[/cyan]"),
@@ -107,7 +107,7 @@ class DualProgressDisplay:
         self.inner_progress = Progress(
             SpinnerColumn(),
             TextColumn("[bold yellow]{task.description}", justify="left"),
-            BarColumn(bar_width=40, complete_style="yellow", finished_style="green"),
+            BarColumn(bar_width=None, complete_style="yellow", finished_style="green"),
             TextColumn("{task.percentage:>6.0f}%", justify="right"),
             TextColumn("{task.completed:>5}/{task.total:<5}", justify="right"),
             TextColumn("[cyan]Elapsed:[/cyan]"),
@@ -155,7 +155,7 @@ class DualProgressDisplay:
             Group(self.outer_progress, self.inner_progress),
             title="[bold green]Progress[/bold green]",
             border_style="green",
-            padding=(1, 2),
+            padding=(0, 2),
         )
 
 
@@ -191,7 +191,7 @@ class TaskFlowDisplay:
         layout = Layout()
         layout.split_column(
             Layout(name="header", size=3),
-            Layout(name="progress", size=7),
+            Layout(name="progress", size=5),
             Layout(name="messages"),
             Layout(name="footer", size=3),
         )
