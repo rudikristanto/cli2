@@ -42,17 +42,17 @@ class MessageLog:
     def render(self, height: int = 20) -> Panel:
         """Render the message log as a Rich Panel with word wrapping."""
         table = Table.grid(expand=True, padding=(0, 1))
-        table.add_column("Time", style="dim cyan", width=10, no_wrap=True)
+        table.add_column("Time", style="dim grey66", width=10, no_wrap=True)
         table.add_column("Level", width=12, no_wrap=True)
         table.add_column("Message", ratio=1, overflow="fold")  # ratio=1 takes remaining space
 
         level_styles = {
-            "INFO": "white",
-            "START": "bold green",
-            "PROGRESS": "yellow",
-            "COMPLETE": "bold blue",
-            "WARNING": "bold yellow",
-            "SUMMARY": "bold magenta",
+            "INFO": "grey74",
+            "START": "bold spring_green3",
+            "PROGRESS": "gold3",
+            "COMPLETE": "bold steel_blue1",
+            "WARNING": "bold dark_orange",
+            "SUMMARY": "bold medium_purple1",
         }
 
         # Show most recent messages that fit in the available height
@@ -71,8 +71,8 @@ class MessageLog:
 
         return Panel(
             table,
-            title="[bold cyan]Task Log[/bold cyan]",
-            border_style="cyan",
+            title="[bold steel_blue1]Task Log[/bold steel_blue1]",
+            border_style="steel_blue",
             padding=(0, 1),
         )
 
@@ -94,11 +94,11 @@ class DualProgressDisplay:
         # Outer progress bar (tracks first loop)
         self.outer_progress = Progress(
             SpinnerColumn(),
-            TextColumn("[bold blue]{task.description:<20}", justify="left"),
-            BarColumn(bar_width=None, complete_style="blue", finished_style="green"),
+            TextColumn("[bold dodger_blue2]{task.description:<20}", justify="left"),
+            BarColumn(bar_width=None, complete_style="dodger_blue2", finished_style="spring_green3"),
             TextColumn("{task.percentage:>6.0f}%", justify="right"),
             TextColumn("{task.completed:>5}/{task.total:<5}", justify="right"),
-            TextColumn("[cyan]Elapsed:[/cyan]"),
+            TextColumn("[grey66]Elapsed:[/grey66]"),
             TimeElapsedColumn(),
             expand=True,
         )
@@ -106,11 +106,11 @@ class DualProgressDisplay:
         # Inner progress bar (tracks combined second and third loops)
         self.inner_progress = Progress(
             SpinnerColumn(),
-            TextColumn("[bold yellow]{task.description:<20}", justify="left"),
-            BarColumn(bar_width=None, complete_style="yellow", finished_style="green"),
+            TextColumn("[bold medium_purple1]{task.description:<20}", justify="left"),
+            BarColumn(bar_width=None, complete_style="medium_purple1", finished_style="spring_green3"),
             TextColumn("{task.percentage:>6.0f}%", justify="right"),
             TextColumn("{task.completed:>5}/{task.total:<5}", justify="right"),
-            TextColumn("[cyan]Elapsed:[/cyan]"),
+            TextColumn("[grey66]Elapsed:[/grey66]"),
             TimeElapsedColumn(),
             expand=True,
         )
@@ -153,8 +153,8 @@ class DualProgressDisplay:
         """Render both progress bars in a panel."""
         return Panel(
             Group(self.outer_progress, self.inner_progress),
-            title="[bold green]Progress[/bold green]",
-            border_style="green",
+            title="[bold steel_blue1]Progress[/bold steel_blue1]",
+            border_style="steel_blue",
             padding=(0, 2),
         )
 
@@ -200,26 +200,26 @@ class TaskFlowDisplay:
     def render_header(self) -> Panel:
         """Render the header panel."""
         title = Text()
-        title.append(f" {__app_name__} ", style="bold white on blue")
-        title.append(f" v{__version__} ", style="bold cyan")
+        title.append(f" {__app_name__} ", style="bold white on dodger_blue2")
+        title.append(f" v{__version__} ", style="bold steel_blue1")
         title.append(" | ", style="dim")
-        title.append("Full-Screen Task Runner", style="italic")
+        title.append("Full-Screen Task Runner", style="italic grey74")
 
-        return Panel(title, style="bold", border_style="blue")
+        return Panel(title, style="bold", border_style="steel_blue")
 
     def render_footer(self, status: str = "Running") -> Panel:
         """Render the footer panel with current status."""
         footer_text = Text()
         footer_text.append("Status: ", style="bold")
-        footer_text.append(status, style="bold green" if status == "Running" else "bold yellow")
+        footer_text.append(status, style="bold spring_green3" if status == "Running" else "bold gold3")
         footer_text.append(" | ", style="dim")
-        footer_text.append(f"Outer: {self._current_outer}/{self.outer_iterations}", style="cyan")
+        footer_text.append(f"Outer: {self._current_outer}/{self.outer_iterations}", style="steel_blue1")
         footer_text.append(" | ", style="dim")
-        footer_text.append(f"Early Exits: {self._early_terminations}", style="yellow")
+        footer_text.append(f"Early Exits: {self._early_terminations}", style="dark_orange")
         footer_text.append(" | ", style="dim")
         footer_text.append("Press Ctrl+C to cancel", style="dim italic")
 
-        return Panel(footer_text, border_style="blue")
+        return Panel(footer_text, border_style="steel_blue")
 
     def update_display(self, status: str = "Running") -> None:
         """Update the live display."""
@@ -251,16 +251,16 @@ class TaskFlowDisplay:
    |_|\__,_|___/_|\_\_|   |_|\___/ \_/\_/
         """
 
-        splash.add_row(Text(logo, style="bold cyan"))
+        splash.add_row(Text(logo, style="bold dodger_blue2"))
         splash.add_row("")
-        splash.add_row(Text(f"Version {__version__}", style="bold yellow"))
-        splash.add_row(Text("A Beautiful Full-Screen CLI Task Runner", style="italic"))
+        splash.add_row(Text(f"Version {__version__}", style="bold steel_blue1"))
+        splash.add_row(Text("A Beautiful Full-Screen CLI Task Runner", style="italic grey74"))
         splash.add_row("")
         splash.add_row(Text("Initializing...", style="dim"))
 
         panel = Panel(
             splash,
-            border_style="cyan",
+            border_style="steel_blue",
             padding=(2, 4),
         )
 
@@ -272,12 +272,12 @@ class TaskFlowDisplay:
         summary_table = Table(
             title="Execution Summary",
             show_header=True,
-            header_style="bold magenta",
-            border_style="magenta",
+            header_style="bold medium_purple1",
+            border_style="medium_purple3",
             expand=True,
         )
-        summary_table.add_column("Metric", style="cyan", width=30)
-        summary_table.add_column("Value", style="green", justify="right")
+        summary_table.add_column("Metric", style="steel_blue1", width=30)
+        summary_table.add_column("Value", style="spring_green3", justify="right")
 
         # Format total time
         hours, remainder = divmod(int(stats.total_time), 3600)
@@ -303,15 +303,15 @@ class TaskFlowDisplay:
             summary_table.add_row("Avg Iterations/Second", f"{iter_per_sec:.2f}")
 
         self.console.print()
-        self.console.print(Panel(summary_table, border_style="magenta", padding=(1, 2)))
+        self.console.print(Panel(summary_table, border_style="medium_purple3", padding=(1, 2)))
         self.console.print()
 
     def display_recent_messages(self) -> None:
         """Display the recent log messages."""
         self.console.print(
             Panel(
-                "[bold cyan]Recent Log Messages[/bold cyan]",
-                border_style="cyan",
+                "[bold steel_blue1]Recent Log Messages[/bold steel_blue1]",
+                border_style="steel_blue",
             )
         )
 

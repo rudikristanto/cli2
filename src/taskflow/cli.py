@@ -24,7 +24,7 @@ def print_version(ctx: click.Context, param: click.Parameter, value: bool) -> No
     if not value or ctx.resilient_parsing:
         return
     console = Console()
-    console.print(f"[bold cyan]{__app_name__}[/bold cyan] version [bold yellow]{__version__}[/bold yellow]")
+    console.print(f"[bold dodger_blue2]{__app_name__}[/bold dodger_blue2] version [bold steel_blue1]{__version__}[/bold steel_blue1]")
     ctx.exit()
 
 
@@ -89,15 +89,15 @@ def main(
     # Warn about terminal size but don't exit
     if console.size.width < 80 or console.size.height < 24:
         console.print(
-            "[bold yellow]Warning:[/bold yellow] Terminal size may be too small. "
+            "[bold dark_orange]Warning:[/bold dark_orange] Terminal size may be too small. "
             f"Current: {console.size.width}x{console.size.height}, "
             "Recommended: at least 80x24",
-            style="yellow",
+            style="gold3",
         )
         console.print("Continuing anyway...\n")
 
     # Display startup info
-    console.print(f"\n[bold cyan]{__app_name__}[/bold cyan] v{__version__}")
+    console.print(f"\n[bold dodger_blue2]{__app_name__}[/bold dodger_blue2] v{__version__}")
     console.print(f"Configuration: outer={outer}, middle={middle}, inner={inner}, sleep={sleep}s")
     console.print("Starting in 1 second...\n")
 
@@ -115,13 +115,13 @@ def main(
     try:
         asyncio.run(app.run())
     except KeyboardInterrupt:
-        console.print("\n[yellow]Interrupted by user[/yellow]")
+        console.print("\n[gold3]Interrupted by user[/gold3]")
         sys.exit(130)
     except Exception as e:
-        console.print(f"\n[bold red]Error:[/bold red] {e}")
+        console.print(f"\n[bold indian_red1]Error:[/bold indian_red1] {e}")
         sys.exit(1)
 
-    console.print("[bold green]TaskFlow completed successfully![/bold green]\n")
+    console.print("[bold spring_green3]TaskFlow completed successfully![/bold spring_green3]\n")
 
 
 if __name__ == "__main__":
