@@ -11,10 +11,8 @@ from rich.live import Live
 from rich.panel import Panel
 from rich.progress import (
     BarColumn,
-    MofNCompleteColumn,
     Progress,
     SpinnerColumn,
-    TaskProgressColumn,
     TextColumn,
     TimeElapsedColumn,
 )
@@ -45,8 +43,8 @@ class MessageLog:
         """Render the message log as a Rich Panel with word wrapping."""
         table = Table.grid(expand=True, padding=(0, 1))
         table.add_column("Time", style="dim cyan", width=10, no_wrap=True)
-        table.add_column("Level", width=7, no_wrap=True)
-        table.add_column("Message", overflow="fold")  # fold enables word wrapping
+        table.add_column("Level", width=12, no_wrap=True)
+        table.add_column("Message", ratio=1, overflow="fold")  # ratio=1 takes remaining space
 
         level_styles = {
             "INFO": "white",
@@ -96,10 +94,10 @@ class DualProgressDisplay:
         # Outer progress bar (tracks first loop)
         self.outer_progress = Progress(
             SpinnerColumn(),
-            TextColumn("[bold blue]{task.description}"),
-            BarColumn(bar_width=40, complete_style="blue", finished_style="green"),
-            TaskProgressColumn(),
-            MofNCompleteColumn(),
+            TextColumn("[bold blue]{task.description:<20}", justify="left"),
+            BarColumn(bar_width=None, complete_style="blue", finished_style="green"),
+            TextColumn("{task.percentage:>6.0f}%", justify="right"),
+            TextColumn("{task.completed:>5}/{task.total:<5}", justify="right"),
             TextColumn("[cyan]Elapsed:[/cyan]"),
             TimeElapsedColumn(),
             expand=True,
@@ -108,10 +106,10 @@ class DualProgressDisplay:
         # Inner progress bar (tracks combined second and third loops)
         self.inner_progress = Progress(
             SpinnerColumn(),
-            TextColumn("[bold yellow]{task.description}"),
-            BarColumn(bar_width=40, complete_style="yellow", finished_style="green"),
-            TaskProgressColumn(),
-            MofNCompleteColumn(),
+            TextColumn("[bold yellow]{task.description:<20}", justify="left"),
+            BarColumn(bar_width=None, complete_style="yellow", finished_style="green"),
+            TextColumn("{task.percentage:>6.0f}%", justify="right"),
+            TextColumn("{task.completed:>5}/{task.total:<5}", justify="right"),
             TextColumn("[cyan]Elapsed:[/cyan]"),
             TimeElapsedColumn(),
             expand=True,
@@ -157,7 +155,7 @@ class DualProgressDisplay:
             Group(self.outer_progress, self.inner_progress),
             title="[bold green]Progress[/bold green]",
             border_style="green",
-            padding=(1, 2),
+            padding=(0, 2),
         )
 
 
@@ -193,7 +191,7 @@ class TaskFlowDisplay:
         layout = Layout()
         layout.split_column(
             Layout(name="header", size=3),
-            Layout(name="progress", size=7),
+            Layout(name="progress", size=4),
             Layout(name="messages"),
             Layout(name="footer", size=3),
         )
@@ -233,7 +231,7 @@ class TaskFlowDisplay:
 
         # Get terminal height and calculate message area height
         terminal_height = self.console.size.height
-        message_height = max(10, terminal_height - 13)  # Subtract header, progress, footer
+        message_height = terminal_height - 10  # Subtract header(3), progress(4), footer(3)
         self.layout["messages"].update(self.message_log.render(height=message_height))
         self.layout["footer"].update(self.render_footer(status))
 
